@@ -7,8 +7,7 @@ O sistema está configurado pra rodar em localhost:8080
 
 Acesso ao sistema pelo http://localhost:8080
 
-Pode checar o código do front end em angular no link abaixo
-https://github.com/andreholive/Angular-CadastroDeCliente.git
+Pode checar o código do front end em angular no link: https://github.com/andreholive/Angular-CadastroDeCliente.git
 
 o sistema em modo 'test' (spring.profiles.active=test) cria dois usuarios no BD em memória: andreolive@live.com e leila@gmail.com ambos com senha 123
 

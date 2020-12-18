@@ -12,6 +12,7 @@ import com.betha.system.dto.ClientDTO;
 import com.betha.system.entities.Client;
 import com.betha.system.entities.Usuario;
 import com.betha.system.repositories.ClientRepository;
+import com.betha.system.security.IAuthentication;
 import com.betha.system.services.exceptions.DatabaseException;
 import com.betha.system.services.exceptions.ResourceNotFoundException;
 
@@ -25,13 +26,24 @@ public class ClientServices {
 	@Autowired
 	private UserServices userServices;
 	
+	@Autowired
+    private IAuthentication auth;
+	
+	@Autowired
+	private UserServices userService;
+	
 	public Client findById(Long id) {
 		Optional<Client> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
+	public Usuario getUser() {
+		Usuario user = userService.findByUserName(auth.getUserName());
+		return user;
+	}
+	
 	public List<Client> findAll() {
-		List<Client> obj = repository.findAll();
+		List<Client> obj = repository.findByUser(getUser());
 		return obj;
 	}
 	
@@ -48,17 +60,16 @@ public class ClientServices {
 	}
 	
 	public Client fromDto(ClientDTO clientDTO) {
-		Usuario user = userServices.findById(clientDTO.getUser());
-		Client client = new Client(clientDTO.getId(), clientDTO.getCpf(), clientDTO.getCnpj(), clientDTO.getNome(), user);
+		Client client = new Client(clientDTO.getId(), clientDTO.getCpf(), clientDTO.getCnpj(), clientDTO.getNome(), getUser());
 		return client;
 	}
 	
 	public Client insert(Client obj) {
 		List<Client> c = null;
 		if(obj.getCpf() != null) {
-			c = repository.findByCpf(obj.getCpf());
+			c = repository.findByCpfAndUser(obj.getCpf(), getUser());
 		}else if(obj.getCnpj() != null) {
-			c = repository.findByCnpj(obj.getCnpj());
+			c = repository.findByCnpjAndUser(obj.getCnpj(), getUser());
 		}
 		
 		if(c.size() == 0) {

@@ -23,6 +23,11 @@ public class UserServices {
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
+	public Usuario findByUserName(String username) {
+		Usuario user = repository.findByLogin(username);
+		return user;
+	}
+	
 	public List<Usuario> findAll() {
 		List<Usuario> obj = repository.findAll();
 		return obj;

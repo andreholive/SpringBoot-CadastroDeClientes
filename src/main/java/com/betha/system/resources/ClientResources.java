@@ -41,6 +41,7 @@ public class ClientResources {
 	@Autowired
 	private AddressServices addressService;
 	
+	
 	@GetMapping
 	public ResponseEntity<List<Client>> findAll(){
 		List<Client> obj = service.findAll();
